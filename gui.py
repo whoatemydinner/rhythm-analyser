@@ -151,7 +151,8 @@ class WaveformFrame(tk.Canvas):
 
     def initialize_canvas(self, use_labels):
         self.figure = matplotfig.Figure(figsize=(5,2), dpi=100, tight_layout=True)
-        self.figure.patch.set_facecolor(self.master["background"])
+        # self.figure.patch.set_facecolor(self.master["background"])
+        self.figure.patch.set_facecolor("white")
         self.axes = self.figure.add_subplot(111)
         self.axes.get_yaxis().set_visible(False)
         if not use_labels:

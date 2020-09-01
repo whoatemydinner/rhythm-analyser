@@ -60,13 +60,31 @@ class SpotifyDatabaseClient:
                 "q": query_term,
                 "type": "track"
             })
+            if second_request.status_code == 200:
+                request = second_request
+
+        artist_verified = False
+        track_verified = False
 
         if request.status_code == 200 or (second_request is not None and second_request.status_code == 200):
             results = request.json()
+
             if "tracks" in results:
-                pass
+                for artist_object in results["tracks"]["items"][0]["artists"]:
+                    artist_verified = artist.lower() in artist_object["name"].lower()
+                    if artist_verified:
+                        break
+                track_verified = title.lower() in results["tracks"]["items"][0]["name"].lower()
+
+            if artist_verified and track_verified:
+                print("Track found, id: {}".format(results["tracks"]["items"][0]["id"]))
+
+    def get_audio_analysis_of_track(self, track_id):
+        aa_endpoint_url = "https://api.spotify.com/v1/audio-analysis/{}".format(track_id)
 
 
 if __name__ == "__main__":
+    # spoti = SpotifyDatabaseClient()
+    # spoti.get_spotify_id_of_track("The Beatles", "Martha My Dear")
     app = Application()
     app.initialize_gui()
